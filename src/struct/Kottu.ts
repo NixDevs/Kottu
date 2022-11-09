@@ -4,7 +4,7 @@ import {
     GatewayIntentBits,
     type RESTPostAPIChatInputApplicationCommandsJSONBody, 
     Routes,
-    REST, Collection
+    REST, Collection, ClientEvents
 } from 'discord.js';
 import Table from 'cli-table3';
 import Command from './Command';
@@ -18,8 +18,14 @@ interface Config {
 }
 import logger from '../transports/winston';
 import { Logger } from 'winston';
+import { readdirSync } from 'fs';
+import Event from 'struct/Event';
+export interface StructureModule<
+  Structure extends Command | Event<keyof ClientEvents>,
+> {
+  default: Structure
+}
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const styling: Table.TableConstructorOptions = {
     chars: { mid: '', 'left-mid': '', 'mid-mid': '', 'right-mid': '' },
     style: {
@@ -82,6 +88,41 @@ export default class Kottu {
         });
         return this;
     }
+    public loadCommands() {
+        this.logger.info('Loading commands...');
+        const table = new Table({
+            head: ['File', 'Name', 'Type', 'Status'],
+            ...styling,
+        });
+        readdirSync('../commands').filter(f=>!f.endsWith('.ts'))
+            .forEach(dir=> {
+                const commands = readdirSync('../commands/'+dir);
+                commands.forEach(async command=> {
+                    const Command = (await import(command) as StructureModule<Command>).default;
+                    if (Command.name) {
+                        this.commands.set(Command.name, Command);
+                        table.push([command, Command.name, Command.type, '✅']);
+                    }
+                });
+            });
+        this.logger.info(`\n${table.toString()}`);
+        return this;
+    }
+    public registerEvents() {
+        this.logger.info('Loading events...');
+        const table = new Table({
+            head: ['File', 'Name', 'Status'],
+            ...styling,
+        });
+        readdirSync('../events').filter(f=>f.endsWith('.ts'))
+            .forEach(async f=> {
+                const event = (await import(f) as StructureModule<Event<keyof ClientEvents>>).default;
+                this.client.on(event.event, event.run.bind(null, this));
+                table.push([f, f.substring(0, f.lastIndexOf('.')), '✅']);
+            });
+        return this;
+    }
+
 }
 
 
