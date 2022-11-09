@@ -1,0 +1,27 @@
+{
+  "name": "kottu",
+  "version": "2.0.0",
+  "description": "The future of discord mini-games",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ARLO",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.11.9",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "eslint": "^8.27.0",
+    "husky": "^8.0.2",
+    "tsconfig-paths": "^4.1.0",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "cli-table3": "^0.6.3",
+    "discord.js": "^14.6.0",
+    "path": "^0.12.7",
+    "prisma": "^4.6.0",
+    "winston": "^3.8.2"
+  }
+}
