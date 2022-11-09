@@ -17,6 +17,8 @@ interface Config {
     clientOptions: ClientOptions,
     betaGuildId: string
 }
+import logger from '../transports/winston';
+import { Logger } from 'winston';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const styling: Table.TableConstructorOptions = {
@@ -28,7 +30,7 @@ const styling: Table.TableConstructorOptions = {
 export default class Kottu {
     public client: Client;
     public clientId: string;
-
+    public logger: Logger;
     private token:string; 
     public readonly ownerIds: string[];
     public readonly betaGuildId: string;
@@ -54,7 +56,7 @@ export default class Kottu {
         this.production = production;
         this.clientOptions = clientOptions;
         this.betaGuildId = betaGuildId;
-		
+        this.logger = logger;
     }
     initiate() {
         this.client = new Client({
@@ -77,7 +79,8 @@ export default class Kottu {
                 const rest = new REST({ version: '10' }).setToken(this.token);
                 await rest.put(applicationCommands, { body: this.body });
             } catch(err) {
-                if (err instanceof Error) console.error(err.stack);
+                if (err instanceof Error) this.logger.error(err.stack);
+                else this.logger.error(err);
             }
         });
         return this;
