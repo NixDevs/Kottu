@@ -14,7 +14,6 @@ interface Config {
     ownerIds: string[],
     bugReportId: string,
     production: boolean,
-    clientOptions: ClientOptions,
     betaGuildId: string
 }
 import logger from '../transports/winston';
@@ -46,7 +45,6 @@ export default class Kottu {
         ownerIds,
         bugReportId,
         production,
-        clientOptions,
         betaGuildId
     }: Config) {
         this.clientId = clientId;
@@ -54,7 +52,6 @@ export default class Kottu {
         this.ownerIds = ownerIds;
         this.bugReportId = bugReportId;
         this.production = production;
-        this.clientOptions = clientOptions;
         this.betaGuildId = betaGuildId;
         this.logger = logger;
     }
