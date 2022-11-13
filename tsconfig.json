@@ -19,7 +19,12 @@
       "importHelpers": true,
       "baseUrl": "src",
       "noImplicitAny": true,
-      "resolveJsonModule": true
+      "resolveJsonModule": true,
+      "paths": {
+        "@structures": ["structures"],
+        "@structures/*": ["structures/*"],
+        "@commands/*": ["commands/*"]
+      }
     },
     "include": ["src"],
     "exclude": ["dist", "node_modules"]

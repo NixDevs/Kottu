@@ -1,13 +1,20 @@
-import { PermissionsBitField } from 'discord.js';
+import {
+    ChatInputCommandInteraction,
+    PermissionsBitField,
+    SlashCommandOptionsOnlyBuilder
+} from 'discord.js';
 import Base from './Base';
-import { CommandType } from './enums';
+import {
+    CommandType
+} from './enums';
 import Kottu from './Kottu';
 
 interface CommandOptions {
     name: string,
-    description: string,
-    permissions?: bigint[],
-    type: CommandType
+        description: string,
+        permissions ? : bigint[],
+        type: CommandType,
+        options ? : SlashCommandOptionsOnlyBuilder
 }
 
 export default class Command extends Base {
@@ -15,7 +22,7 @@ export default class Command extends Base {
     public name: string;
 
     public description: string;
-    
+
     public permissions: bigint[];
 
     public type: CommandType;
@@ -31,7 +38,8 @@ export default class Command extends Base {
         this.permissions = permissions;
         this.type = type;
     }
-    public execute(): TypeError{
-        throw new TypeError('No execute function >:(');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public execute(interaction: ChatInputCommandInteraction) {
+        return Promise.resolve();
     }
 }

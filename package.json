@@ -4,7 +4,8 @@
   "description": "The future of discord mini-games",
   "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node index.ts"
   },
   "author": "ARLO",
   "license": "MIT",
@@ -14,15 +15,16 @@
     "@typescript-eslint/parser": "^5.42.0",
     "eslint": "^8.27.0",
     "husky": "^8.0.2",
+    "prisma": "^4.6.1",
     "tsconfig-paths": "^4.1.0",
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "@prisma/client": "^4.6.1",
     "cli-table3": "^0.6.3",
     "discord.js": "^14.6.0",
     "dotenv": "^16.0.3",
     "path": "^0.12.7",
-    "prisma": "^4.6.0",
     "winston": "^3.8.2"
   }
 }
