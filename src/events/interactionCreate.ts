@@ -14,6 +14,13 @@ export default new Event(Events.InteractionCreate, async (kottu: Kottu, interact
             await interaction.reply('This command is unavailable!');
             Promise.resolve();
         }
-        command?.execute(interaction);
+        try {
+            command?.execute(interaction);
+        } catch (err) {
+            if (err instanceof Error) {
+                kottu.logger.error(err.stack);
+            }
+            else kottu.logger.error(err);
+        }
     }
 });

@@ -11,7 +11,7 @@ model Guild {
     blacklisted Boolean
 }
 model User {
-    id String @id @map("_id") @unique
+    id String @id @unique @map("_id") 
     blacklisted Boolean
     stats String
 }

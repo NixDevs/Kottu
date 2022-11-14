@@ -13,6 +13,7 @@ export default class Ping extends Command {
     public execute(interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
         interaction.reply(`Latency: \`${interaction.client.ws.ping}ms\``);
         return Promise.resolve();
+        
     }
 }
 
