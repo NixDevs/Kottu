@@ -18,7 +18,7 @@ export default new Event(Events.ClientReady, (kottu:Kottu, client)=> {
             }
         });
     });
-    /*
+    
     client.users.cache.forEach(async user=> {
         await PrismaClient.user.upsert({
             where: {
@@ -33,7 +33,7 @@ export default new Event(Events.ClientReady, (kottu:Kottu, client)=> {
                 stats: ''
             }
         });
-    });*/
+    });
     
     
     kottu.logger.info(`Successfully logged in as ${client.user.tag}`);    
