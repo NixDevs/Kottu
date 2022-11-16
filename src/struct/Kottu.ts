@@ -84,7 +84,8 @@ export default class Kottu {
         this
             .loadApplicationCommands()
             .loadCommands()
-            .loadEvents();
+            .loadEvents()
+            .loadModules();
         this.client.login(this.token);
         return this;
     }
@@ -154,10 +155,11 @@ export default class Kottu {
             ...styling,
         });
         const modules = readdirSync('./src/modules');
-        if (modules.length === 0) this.logger.warn('No modules found!');
+        if (modules.length === 0) return this.logger.warn('No modules found!');
         modules.forEach(async dir=> {
             const file = (await import(join('./src/modules', dir, 'index.ts'))).default;
             const module = new file(this);
+            file.registerEvents();
             this.commands.set(module.name, module);
         });
         this.logger.info(`\n${table.toString()}`);
