@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node index.ts",
-    "prepare": "npx prisma generate && npx prisma db push"
+    "prepare": "npx prisma generate && npx prisma db push",
+    "start:dev": "ts-node-dev --exit-child -r --debug index.ts"
   },
   "author": "ARLO",
   "license": "MIT",
@@ -17,6 +18,7 @@
     "eslint": "^8.27.0",
     "husky": "^8.0.2",
     "prisma": "^4.6.1",
+    "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.1.0",
     "typescript": "^4.8.4"
   },

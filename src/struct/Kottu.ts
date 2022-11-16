@@ -85,7 +85,8 @@ export default class Kottu {
             .loadApplicationCommands()
             .loadCommands()
             .loadEvents()
-            .loadModules();
+            //.loadModules()
+        ;
         this.client.login(this.token);
         return this;
     }
