@@ -10,12 +10,12 @@ import {
 import Table from 'cli-table3';
 import Command from './Command';
 interface Config {
-    clientId: string,
-        token: string,
-        ownerIds: string[],
-        bugReportId: string,
-        production: boolean,
-        betaGuildId: string
+    clientId: string | undefined,
+    token: string | undefined,
+    ownerId: string | undefined,
+    bugReportId: string | undefined,
+    production: boolean | undefined,
+    guildId: string | undefined
 }
 import { join, resolve } from 'path';
 import logger from '../transports/winston';
@@ -42,13 +42,13 @@ const styling: Table.TableConstructorOptions = {
 };
 export default class Kottu {
     public client: Client;
-    public clientId: string;
+    public clientId: string | undefined;
     public logger: Logger;
-    private token: string;
-    public readonly ownerIds: string[];
-    public readonly betaGuildId: string;
-    public readonly bugReportId: string;
-    public readonly production: boolean;
+    private token: string | undefined;
+    public readonly ownerId: string | undefined;
+    public readonly guildId: string | undefined;
+    public readonly bugReportId: string | undefined;
+    public readonly production: boolean | undefined;
     public readonly clientOptions: ClientOptions;
     private body: RESTPostAPIChatInputApplicationCommandsJSONBody[];
     public commands: Collection < string, Command > ;
@@ -57,17 +57,17 @@ export default class Kottu {
     constructor({
         clientId,
         token,
-        ownerIds,
+        ownerId,
         bugReportId,
         production,
-        betaGuildId
+        guildId
     }: Config) {
         this.clientId = clientId;
         this.token = token;
-        this.ownerIds = ownerIds;
+        this.ownerId = ownerId;
         this.bugReportId = bugReportId;
         this.production = production;
-        this.betaGuildId = betaGuildId;
+        this.guildId = guildId;
         this.logger = logger;
         this.commands = new Collection();
     }
@@ -93,11 +93,11 @@ export default class Kottu {
 
     public loadApplicationCommands() {
         (async () => {
-            const applicationCommands = this.production === true ? Routes.applicationCommands(this.clientId) : Routes.applicationGuildCommands(this.clientId, this.betaGuildId);
+            const applicationCommands = this.production === true ? Routes.applicationCommands(this.clientId ?? '') : Routes.applicationGuildCommands(this.clientId ?? '', this.guildId ?? '');
             try {
                 const rest = new REST({
                     version: '10'
-                }).setToken(this.token);
+                }).setToken(this.token ?? '');
                 await rest.put(applicationCommands, {
                     body: this.body
                 });

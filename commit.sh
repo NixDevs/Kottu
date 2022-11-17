@@ -1,4 +1,7 @@
 #!/bin/sh
+
+git add .
+
 TYPE=$(gum choose "fix" "feat" "docs" "style" "refactor" "test" "chore" "revert" "build")
 SCOPE=$(gum input --placeholder "scope")
 
