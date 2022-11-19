@@ -4,7 +4,7 @@
   "description": "The future of discord mini-games",
   "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\"",
     "start": "ts-node index.ts",
     "prepare": "npx prisma generate && npx prisma db push",
     "start:dev": "ts-node-dev --exit-child -r --debug ./index.ts"
@@ -12,6 +12,8 @@
   "author": "ARLO",
   "license": "MIT",
   "devDependencies": {
+    "@commitlint/cli": "^17.2.0",
+    "@commitlint/config-conventional": "^17.2.0",
     "@types/node": "^18.11.9",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
