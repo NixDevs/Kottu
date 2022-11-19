@@ -1,24 +1,25 @@
 {
-    "cSpell.words": [
-        "acro",
-        "acrophobia",
-        "cah",
-        "cardsagainsthumanity",
-        "commitlint",
-        "kottu",
-        "nintendo",
-        "prisma",
-        "taboo"
-    ],
-    "cSpell.enabled": true,
-    "cSpell.caseSensitive": true,
-    "cSpell.ignorePaths": [
-        "package-lock.json",
-        "node_modules",
-        "vscode-extension",
-        ".git/objects",
-        ".vscode",
-        ".vscode-insiders",
-        "kill.json"
-    ]
+  "cSpell.words": [
+    "acro",
+    "acrophobia",
+    "cah",
+    "cardsagainsthumanity",
+    "commitlint",
+    "ecma",
+    "kottu",
+    "nintendo",
+    "prisma",
+    "taboo"
+  ],
+  "cSpell.enabled": true,
+  "cSpell.caseSensitive": true,
+  "cSpell.ignorePaths": [
+    "package-lock.json",
+    "node_modules",
+    "vscode-extension",
+    ".git/objects",
+    ".vscode",
+    ".vscode-insiders",
+    "kill.json"
+  ]
 }
