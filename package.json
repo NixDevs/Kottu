@@ -8,7 +8,9 @@
     "start": "ts-node index.ts",
     "prepare": "npx prisma generate && npx prisma db push",
     "start:dev": "ts-node-dev --exit-child -r --debug ./index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "eslint --ext .js,.ts src",
+    "check": "prettier --ignore-path .gitignore --check ."
   },
   "author": "ARLO",
   "license": "MIT",
