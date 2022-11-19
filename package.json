@@ -34,5 +34,9 @@
     "dotenv": "^16.0.3",
     "path": "^0.12.7",
     "winston": "^3.8.2"
+  },
+  "lint-staged": {
+    "**/*.{js,ts}": "eslint --ext .js,.ts",
+    "**/*.{js,ts,json,md}": "prettier --ignore-path .gitignore --write"
   }
 }

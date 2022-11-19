@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 /**
- * The mportable prisma db
+ * The importable prisma db
  */
+
 export default new PrismaClient();
