@@ -6,19 +6,18 @@ export default class Module extends Base {
     public games: Record<string, unknown>;
     constructor(kottu: Kottu) {
         super(kottu);
-        
+
         this.name = this.constructor.name;
 
         this.events = ['messageCreate', 'interactionCreate'];
 
         this.games = {};
-
     }
     /**
      * Register events in module
      */
     registerEvents(): void {
-        this.events.forEach(event=> {
+        this.events.forEach((event) => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const eventFn = this[event];

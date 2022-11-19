@@ -1,6 +1,4 @@
-import type {
-    ClientEvents
-} from 'discord.js';
+import type { ClientEvents } from 'discord.js';
 import Kottu from 'struct/Kottu';
 
 /**
@@ -8,7 +6,7 @@ import Kottu from 'struct/Kottu';
  *
  * @typeParam K - Key which must be one of the following event types: {@link https://discord.js.org/#/docs/discord.js/main/typedef/Events}
  */
-export default class Event < K extends keyof ClientEvents > {
+export default class Event<K extends keyof ClientEvents> {
     public constructor(
         /** The event type */
         public event: K,
@@ -22,6 +20,6 @@ export default class Event < K extends keyof ClientEvents > {
         public run: (
             kottu: Kottu,
             ...args: ClientEvents[K]
-        ) => Promise < void > | void,
+        ) => Promise<void> | void,
     ) {}
 }

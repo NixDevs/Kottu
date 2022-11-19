@@ -6,14 +6,14 @@ export default class Ping extends Command {
     constructor(kottu: Kottu) {
         super(kottu, {
             name: 'ping',
-            description: 'Get the bot\'s latency',
+            description: "Get the bot's latency",
             type: CommandType.Info,
         });
     }
-    public execute(interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
+    public execute(
+        interaction: ChatInputCommandInteraction<CacheType>,
+    ): Promise<void> {
         interaction.reply(`Latency: \`${interaction.client.ws.ping}ms\``);
         return Promise.resolve();
-        
     }
 }
-

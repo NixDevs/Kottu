@@ -4,7 +4,7 @@
 export enum CommandType {
     Info = 'info',
     Fun = 'fun',
-    Misc = 'misc'
+    Misc = 'misc',
 }
 /**
  * ###### ew errors
@@ -22,5 +22,5 @@ export enum Color {
     Black = '#000001',
     Blue = '#2b2bff',
     Purple = '#a107fa',
-    Cyan = '#00bbff'
+    Cyan = '#00bbff',
 }

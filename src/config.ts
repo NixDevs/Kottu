@@ -15,8 +15,8 @@ const getConfig = (): ENV => {
         CLIENT_ID: process.env.CLIENT_ID,
         GUILD_ID: process.env.GUILD_ID,
         BUG_REPORT_ID: process.env.BUG_REPORT_ID,
-        PRODUCTION: (process.env.PRODUCTION === 'true'),
-        OWNER_ID: process.env.OWNER
+        PRODUCTION: process.env.PRODUCTION === 'true',
+        OWNER_ID: process.env.OWNER,
     };
 };
 /**
@@ -31,7 +31,7 @@ const getParsedConfig = () => {
         guildId: config.GUILD_ID,
         clientId: config.CLIENT_ID,
         production: config.PRODUCTION,
-        ownerId: config.OWNER_ID
+        ownerId: config.OWNER_ID,
     };
 };
 export default { getConfig, getParsedConfig };

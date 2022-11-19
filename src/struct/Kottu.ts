@@ -5,36 +5,31 @@ import {
     type RESTPostAPIChatInputApplicationCommandsJSONBody,
     Routes,
     REST,
-    Collection
+    Collection,
 } from 'discord.js';
 import Table from 'cli-table3';
 import Command from './Command';
 interface Config {
-    clientId: string | undefined,
-    token: string | undefined,
-    ownerId: string | undefined,
-    bugReportId: string | undefined,
-    production: boolean | undefined,
-    guildId: string | undefined
+    clientId: string | undefined;
+    token: string | undefined;
+    ownerId: string | undefined;
+    bugReportId: string | undefined;
+    production: boolean | undefined;
+    guildId: string | undefined;
 }
 import { join, resolve } from 'path';
 import logger from '../transports/winston';
-import {
-    Logger
-} from 'winston';
-import {
-    readdirSync
-} from 'fs';
+import { Logger } from 'winston';
+import { readdirSync } from 'fs';
 import Module from './Module';
 //import Event from 'struct/Event';
-
 
 const styling: Table.TableConstructorOptions = {
     chars: {
         mid: '',
         'left-mid': '',
         'mid-mid': '',
-        'right-mid': ''
+        'right-mid': '',
     },
     style: {
         head: ['yellow'],
@@ -51,8 +46,8 @@ export default class Kottu {
     public readonly production: boolean | undefined;
     public readonly clientOptions: ClientOptions;
     private body: RESTPostAPIChatInputApplicationCommandsJSONBody[];
-    public commands: Collection < string, Command > ;
-    public modules: Collection < string, Module > ;
+    public commands: Collection<string, Command>;
+    public modules: Collection<string, Module>;
 
     constructor({
         clientId,
@@ -60,7 +55,7 @@ export default class Kottu {
         ownerId,
         bugReportId,
         production,
-        guildId
+        guildId,
     }: Config) {
         this.clientId = clientId;
         this.token = token;
@@ -83,14 +78,10 @@ export default class Kottu {
                 GatewayIntentBits.MessageContent,
                 GatewayIntentBits.GuildMembers,
                 GatewayIntentBits.GuildPresences,
-            ]
+            ],
         });
-        this
-            .loadApplicationCommands()
-            .loadCommands()
-            .loadEvents()
-            //.loadModules()
-        ;
+        this.loadApplicationCommands().loadCommands().loadEvents();
+        //.loadModules()
         this.client.login(this.token);
         return this;
     }
@@ -99,20 +90,26 @@ export default class Kottu {
      * @returns {ThisType} `this`
      */
     public loadApplicationCommands() {
-        (async () => {
-            const applicationCommands = this.production === true ? Routes.applicationCommands(this.clientId ?? '') : Routes.applicationGuildCommands(this.clientId ?? '', this.guildId ?? '');
+        async () => {
+            const applicationCommands =
+                this.production === true
+                    ? Routes.applicationCommands(this.clientId ?? '')
+                    : Routes.applicationGuildCommands(
+                          this.clientId ?? '',
+                          this.guildId ?? '',
+                      );
             try {
                 const rest = new REST({
-                    version: '10'
+                    version: '10',
                 }).setToken(this.token ?? '');
                 await rest.put(applicationCommands, {
-                    body: this.body
+                    body: this.body,
                 });
             } catch (err) {
                 if (err instanceof Error) this.logger.error(err.stack);
                 else this.logger.error(err);
             }
-        });
+        };
         return this;
     }
     /**
@@ -120,19 +117,22 @@ export default class Kottu {
      * @returns {ThisType} this
      */
     public loadCommands() {
-    
         this.logger.info('Loading commands...');
         const table = new Table({
             head: ['File', 'Name', 'Type', 'Status'],
             ...styling,
         });
-        const commandFolders = readdirSync(join('./src/commands/')).filter(f => !f.endsWith('.ts'));
+        const commandFolders = readdirSync(join('./src/commands/')).filter(
+            (f) => !f.endsWith('.ts'),
+        );
         if (commandFolders.length === 0) this.logger.warn('No commands found!');
-        commandFolders.forEach(dir => {
+        commandFolders.forEach((dir) => {
             const commands = readdirSync(resolve(join('./src/commands/', dir)));
             console.log(commands);
             commands.forEach(async (cmd) => {
-                const CommandClass = (await import(join('../commands', dir, cmd))).default;
+                const CommandClass = (
+                    await import(join('../commands', dir, cmd))
+                ).default;
                 const command = new CommandClass(this);
                 if (command.name) {
                     console.log(command.name);
@@ -155,9 +155,11 @@ export default class Kottu {
             head: ['File', 'Name', 'Status'],
             ...styling,
         });
-        const events = readdirSync('./src/events').filter(f => f.endsWith('.ts'));
+        const events = readdirSync('./src/events').filter((f) =>
+            f.endsWith('.ts'),
+        );
         if (events.length === 0) this.logger.warn('No modules found!');
-        events.forEach(async f => {
+        events.forEach(async (f) => {
             const event = (await import(`../events/${f}`)).default;
             this.client.on(event.event, event.run.bind(null, this));
             table.push([f, f.substring(0, f.lastIndexOf('.')), '✅']);
@@ -177,8 +179,9 @@ export default class Kottu {
         });
         const modules = readdirSync('./src/modules');
         if (modules.length === 0) return this.logger.warn('No modules found!');
-        modules.forEach(async dir=> {
-            const file = (await import(join('./src/modules', dir, 'index.ts'))).default;
+        modules.forEach(async (dir) => {
+            const file = (await import(join('./src/modules', dir, 'index.ts')))
+                .default;
             const module = new file(this);
             file.registerEvents();
             this.commands.set(module.name, module);
