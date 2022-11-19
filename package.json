@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\"",
     "start": "ts-node index.ts",
     "prepare": "npx prisma generate && npx prisma db push",
-    "start:dev": "ts-node-dev --exit-child -r --debug ./index.ts"
+    "start:dev": "ts-node-dev --exit-child -r --debug ./index.ts",
+    "build": "tsc"
   },
   "author": "ARLO",
   "license": "MIT",
