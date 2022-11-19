@@ -71,6 +71,10 @@ export default class Kottu {
         this.logger = logger;
         this.commands = new Collection();
     }
+    /**
+     * initiate client
+     * @returns {ThisType}
+     */
     initiate() {
         this.client = new Client({
             intents: [
@@ -90,7 +94,10 @@ export default class Kottu {
         this.client.login(this.token);
         return this;
     }
-
+    /**
+     * Loads all slash commands using REST API
+     * @returns {ThisType} `this`
+     */
     public loadApplicationCommands() {
         (async () => {
             const applicationCommands = this.production === true ? Routes.applicationCommands(this.clientId ?? '') : Routes.applicationGuildCommands(this.clientId ?? '', this.guildId ?? '');
@@ -108,7 +115,12 @@ export default class Kottu {
         });
         return this;
     }
+    /**
+     * loads commands to collection
+     * @returns {ThisType} this
+     */
     public loadCommands() {
+    
         this.logger.info('Loading commands...');
         const table = new Table({
             head: ['File', 'Name', 'Type', 'Status'],
@@ -133,6 +145,10 @@ export default class Kottu {
         this.logger.info('loaded commands...');
         return this;
     }
+    /**
+     * loads client events
+     * @returns {ThisType}
+     */
     public loadEvents() {
         this.logger.info('Loading events...');
         const table = new Table({
@@ -149,6 +165,10 @@ export default class Kottu {
         this.logger.info(`\n${table.toString()}`);
         return this;
     }
+    /**
+     * loads modules
+     * @returns {ThisType}
+     */
     public loadModules() {
         this.logger.info('Loading events...');
         const table = new Table({

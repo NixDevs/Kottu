@@ -1,12 +1,21 @@
+/**
+ * ###### not so fun
+ */
 export enum CommandType {
     Info = 'info',
     Fun = 'fun',
     Misc = 'misc'
 }
+/**
+ * ###### ew errors
+ */
 export enum ErrorType {
     Missing = 'Missing Permissions',
     Failure = 'Command Failure',
 }
+/**
+ * ###### Colors are cool
+ */
 export enum Color {
     Red = '#FF0000',
     White = '#FFFFFF',

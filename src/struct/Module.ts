@@ -14,6 +14,9 @@ export default class Module extends Base {
         this.games = {};
 
     }
+    /**
+     * Register events in module
+     */
     registerEvents(): void {
         this.events.forEach(event=> {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment

@@ -18,13 +18,21 @@ interface CommandOptions {
 }
 
 export default class Command extends Base {
-
+    /**
+     * the command name
+     */
     public name: string;
-
+    /**
+     * the command description
+     */
     public description: string;
-
+    /**
+     * the command perms
+     */
     public permissions: bigint[];
-
+    /**
+     * the command type
+     */
     public type: CommandType;
     constructor(kottu: Kottu, {
         name,
@@ -38,6 +46,9 @@ export default class Command extends Base {
         this.permissions = permissions;
         this.type = type;
     }
+    /**
+     * Fall back execute command
+     */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public execute(interaction: ChatInputCommandInteraction) {
         return Promise.resolve();

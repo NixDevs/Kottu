@@ -6,6 +6,9 @@ interface ENV {
     BUG_REPORT_ID: string | undefined;
     OWNER_ID: string | undefined;
 }
+/**
+ * gets object of environment variables
+ */
 const getConfig = (): ENV => {
     return {
         TOKEN: process.env.TOKEN,
@@ -16,6 +19,10 @@ const getConfig = (): ENV => {
         OWNER_ID: process.env.OWNER
     };
 };
+/**
+ * Returns environment variables with camelCase keys;
+ * @returns {Object}
+ */
 const getParsedConfig = () => {
     const config = getConfig();
     return {
