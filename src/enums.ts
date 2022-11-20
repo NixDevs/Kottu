@@ -24,3 +24,9 @@ export enum Color {
     Purple = '#a107fa',
     Cyan = '#00bbff',
 }
+
+export enum PermissionLevel {
+    Owner = 'owner',
+    Admin = 'admin',
+    Public = 'public',
+}
