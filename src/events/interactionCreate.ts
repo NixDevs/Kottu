@@ -1,7 +1,7 @@
 import { Events, Interaction } from 'discord.js';
 import { PermissionLevel } from 'enums';
-import Event from 'struct/Event';
-import Kottu from 'struct/Kottu';
+import Event from '@struct/Event';
+import Kottu from '@struct/Kottu';
 import PrismaClient from '../prisma';
 export default new Event(
     Events.InteractionCreate,
