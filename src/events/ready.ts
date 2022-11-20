@@ -1,7 +1,7 @@
 import { Events } from 'discord.js';
 import PrismaClient from '../prisma';
-import Event from 'struct/Event';
-import Kottu from 'struct/Kottu';
+import Event from '@struct/Event';
+import Kottu from '@struct/Kottu';
 export default new Event(Events.ClientReady, (kottu: Kottu, client) => {
     client.guilds.cache.forEach(async (g) => {
         await PrismaClient.guild.upsert({

@@ -1,5 +1,5 @@
 import { Events, Interaction } from 'discord.js';
-import { PermissionLevel } from 'struct/enums';
+import { PermissionLevel } from 'enums';
 import Event from 'struct/Event';
 import Kottu from 'struct/Kottu';
 import PrismaClient from '../prisma';

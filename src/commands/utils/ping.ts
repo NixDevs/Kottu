@@ -1,6 +1,6 @@
-import Command from 'struct/Command';
-import Kottu from 'struct/Kottu';
-import { CommandType } from 'struct/enums';
+import Command from '@struct/Command';
+import Kottu from '@struct/Kottu';
+import { CommandType } from 'enums';
 import { ChatInputCommandInteraction, CacheType } from 'discord.js';
 export default class Ping extends Command {
     constructor(kottu: Kottu) {

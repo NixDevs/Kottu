@@ -1,5 +1,5 @@
-import Base from './Base';
-import Kottu from './Kottu';
+import Base from '@struct/Base';
+import Kottu from '@struct/Kottu';
 export default class Module extends Base {
     public name: string;
     public events: string[];

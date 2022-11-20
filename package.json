@@ -10,7 +10,8 @@
         "start:dev": "ts-node-dev --exit-child -r --debug ./index.ts",
         "build": "tsc",
         "lint": "eslint --ext .js,.ts src",
-        "check": "prettier --ignore-path .gitignore --check ."
+        "check": "prettier --ignore-path .gitignore --check .",
+        "write": "prettier --ignore-path .gitignore --write ."
     },
     "author": "ARLO",
     "license": "MIT",

@@ -21,8 +21,8 @@
         "noImplicitAny": true,
         "resolveJsonModule": true,
         "paths": {
-            "@structures": ["structures"],
-            "@structures/*": ["structures/*"],
+            "@struct": ["struct"],
+            "@struct/*": ["struct/*"],
             "@commands/*": ["commands/*"]
         },
         "typeRoots": ["./global.d.ts", "./node_modules/@types"]

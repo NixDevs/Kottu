@@ -3,8 +3,8 @@ import {
     SlashCommandOptionsOnlyBuilder,
 } from 'discord.js';
 import Base from './Base';
-import { CommandType, PermissionLevel } from './enums';
-import Kottu from './Kottu';
+import { CommandType, PermissionLevel } from '../enums';
+import Kottu from '@struct/Kottu';
 
 interface CommandOptions {
     name: string;

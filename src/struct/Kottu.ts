@@ -8,7 +8,7 @@ import {
     Collection,
 } from 'discord.js';
 import Table from 'cli-table3';
-import Command from './Command';
+import Command from '@struct/Command';
 interface Config {
     clientId: string | undefined;
     token: string | undefined;

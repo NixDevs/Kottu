@@ -1,5 +1,5 @@
 import type { ClientEvents } from 'discord.js';
-import Kottu from 'struct/Kottu';
+import Kottu from '@struct/Kottu';
 
 /**
  * Generic Event class which provides the structure for all events.
