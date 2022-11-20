@@ -1,16 +1,15 @@
 import {
     ChatInputCommandInteraction,
-    PermissionsBitField,
     SlashCommandOptionsOnlyBuilder,
 } from 'discord.js';
 import Base from './Base';
-import { CommandType } from './enums';
+import { CommandType, PermissionLevel } from './enums';
 import Kottu from './Kottu';
 
 interface CommandOptions {
     name: string;
     description: string;
-    permissions?: bigint[];
+    permissions?: PermissionLevel;
     type: CommandType;
     options?: SlashCommandOptionsOnlyBuilder;
 }
@@ -27,7 +26,7 @@ export default class Command extends Base {
     /**
      * the command perms
      */
-    public permissions: bigint[];
+    public permissions: PermissionLevel;
     /**
      * the command type
      */
@@ -37,10 +36,7 @@ export default class Command extends Base {
         {
             name,
             description,
-            permissions = [
-                PermissionsBitField.Flags.ReadMessageHistory,
-                PermissionsBitField.Flags.ViewChannel,
-            ],
+            permissions = PermissionLevel.Public,
             type = CommandType.Misc,
         }: CommandOptions,
     ) {
