@@ -1,6 +1,7 @@
 import {
+    ApplicationCommandOption,
     ChatInputCommandInteraction,
-    SlashCommandOptionsOnlyBuilder,
+    InteractionResponse,
 } from 'discord.js';
 import Base from './Base';
 import { CommandType, PermissionLevel } from '../enums';
@@ -10,8 +11,8 @@ interface CommandOptions {
     name: string;
     description: string;
     permissions?: PermissionLevel;
-    type: CommandType;
-    options?: SlashCommandOptionsOnlyBuilder;
+    type?: CommandType;
+    options?: ApplicationCommandOption[];
 }
 
 export default class Command extends Base {
@@ -48,9 +49,27 @@ export default class Command extends Base {
     }
     /**
      * Fall back execute command
+     * @param interaction the slash command interaction
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public execute(interaction: ChatInputCommandInteraction) {
+    public execute(
+        interaction: ChatInputCommandInteraction,
+    ): Promise<InteractionResponse | void> {
         return Promise.resolve();
+    }
+    /**
+     * Returns member and user from interaction member option
+     * @param interaction the slash command interaction
+     * @param option the name for the member option
+     */
+    public getMember(
+        interaction: ChatInputCommandInteraction,
+        option = 'member',
+    ) {
+        if (!interaction.inCachedGuild()) return { target: null, member: null };
+        const member = interaction.options.getMember(option);
+        if (!member)
+            return { target: interaction.member, member: interaction.member };
+        else return { target: member, member: interaction.member };
     }
 }
