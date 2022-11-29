@@ -1,6 +1,6 @@
 datasource db {
     provider    = "sqlite"
-    url         = "file:data.db"
+    url         = "file:data.db?socket_timeout=10&connection_limit=1?journal_mode=wal"
 }
 generator client {
   provider = "prisma-client-js"

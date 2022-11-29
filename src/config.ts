@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config();
 interface ENV {
     TOKEN: string | undefined;
     CLIENT_ID: string | undefined;
@@ -16,7 +18,7 @@ const getConfig = (): ENV => {
         GUILD_ID: process.env.GUILD_ID,
         BUG_REPORT_ID: process.env.BUG_REPORT_ID,
         PRODUCTION: process.env.PRODUCTION === 'true',
-        OWNER_ID: process.env.OWNER,
+        OWNER_ID: process.env.OWNER_ID,
     };
 };
 /**

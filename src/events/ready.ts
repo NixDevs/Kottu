@@ -1,8 +1,10 @@
 import { Events } from 'discord.js';
-import PrismaClient from '../prisma';
+//import PrismaClient from '../prisma';
 import Event from '@struct/Event';
 import Kottu from '@struct/Kottu';
+
 export default new Event(Events.ClientReady, (kottu: Kottu, client) => {
+    /*
     client.guilds.cache.forEach(async (g) => {
         await PrismaClient.guild.upsert({
             where: {
@@ -20,12 +22,13 @@ export default new Event(Events.ClientReady, (kottu: Kottu, client) => {
     });
 
     client.users.cache.forEach(async (user) => {
+        if (!user.id) return;
         await PrismaClient.user.upsert({
             where: {
                 id: user.id,
             },
             update: {
-                id: user.id,
+                id: user.id
             },
             create: {
                 id: user.id,
@@ -33,7 +36,8 @@ export default new Event(Events.ClientReady, (kottu: Kottu, client) => {
                 stats: '',
             },
         });
+        await pause(100);
     });
-
+    */
     kottu.logger.info(`Successfully logged in as ${client.user.tag}`);
 });

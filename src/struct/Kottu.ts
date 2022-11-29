@@ -99,12 +99,14 @@ export default class Kottu {
                           this.guildId ?? '',
                       );
             try {
+                this.logger.info('Loading application commands!');
                 const rest = new REST({
                     version: '10',
                 }).setToken(this.token ?? '');
                 await rest.put(applicationCommands, {
                     body: this.body,
                 });
+                this.logger.info('Loaded application commands!');
             } catch (err) {
                 if (err instanceof Error) this.logger.error(err.stack);
                 else this.logger.error(err);

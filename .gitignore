@@ -131,3 +131,4 @@ dist
 .pnp.*
 
 commit.sh
+./prisma/*.db

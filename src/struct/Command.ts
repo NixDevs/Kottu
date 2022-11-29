@@ -51,8 +51,8 @@ export default class Command extends Base {
      * Fall back execute command
      * @param interaction the slash command interaction
      */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public execute(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         interaction: ChatInputCommandInteraction,
     ): Promise<InteractionResponse | void> {
         return Promise.resolve();

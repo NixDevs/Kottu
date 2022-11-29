@@ -1,8 +1,6 @@
 import Kottu from './src/struct/Kottu';
-import dotenv from 'dotenv';
 import config from './src/config';
 const clientConfig = config.getParsedConfig();
-dotenv.config();
-
+console.log(clientConfig);
 const kottu = new Kottu(clientConfig);
 kottu.initiate();
