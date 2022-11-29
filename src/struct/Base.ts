@@ -2,8 +2,10 @@ import KottuClient from 'struct/Kottu';
 import {
     ChatInputCommandInteraction,
     Client,
+    Guild,
     InteractionReplyOptions,
     InteractionResponse,
+    User,
 } from 'discord.js';
 import { PrismaClient } from '@prisma/client';
 import logger from '../transports/winston';
@@ -87,6 +89,24 @@ export default class Base {
         return await this.prisma.guild.findUnique({
             where: {
                 id: id,
+            },
+        });
+    }
+    public async createGuild(guild: Guild) {
+        return await this.prisma.guild.create({
+            data: {
+                id: guild.id,
+                adminRole: '',
+                blacklisted: false,
+            },
+        });
+    }
+    public async createUser(user: User) {
+        return await this.prisma.user.create({
+            data: {
+                id: user.id,
+                blacklisted: false,
+                stats: '',
             },
         });
     }
