@@ -1,1 +1,1 @@
-export { default as Kill } from './kill';
+export { default as Kill } from './Kill';

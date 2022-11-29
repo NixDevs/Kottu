@@ -1,1 +1,1 @@
-export { default as Ping } from '@commands/utils/ping';
+export { default as Ping } from '@commands/utils/Ping';
