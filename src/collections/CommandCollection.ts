@@ -3,6 +3,7 @@ import * as commands from '@commands/index';
 export default class CommandCollection extends Base {
     constructor(kottu: Kottu) {
         super(kottu);
+        this.loadCommands();
     }
     loadCommands() {
         const values = Object.values(commands);
