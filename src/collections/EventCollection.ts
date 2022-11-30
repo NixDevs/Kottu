@@ -1,16 +1,21 @@
-import { Base, Kottu } from '@struct';
+import { Command, Kottu } from '@struct';
+import { Collection } from 'discord.js';
 import * as events from '../events';
-export default class EventCollection extends Base {
+export default class EventCollection extends Collection<string, Command> {
+    public kottu: Kottu;
     constructor(kottu: Kottu) {
-        super(kottu);
+        super();
+        this.kottu = kottu;
     }
     loadCommands() {
         const values = Object.values(events);
         values.forEach((event) => {
-            this.client.on(event.event, (...args) =>
+            this.kottu.client.on(event.event, (...args) =>
                 event.run(this.kottu, ...(args as never)),
             );
-            this.logger.info(`[Event] loaded ${event.event.toString()} event`);
+            this.kottu.logger.info(
+                `[Event] loaded ${event.event.toString()} event`,
+            );
         });
     }
 }
