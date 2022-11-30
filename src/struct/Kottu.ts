@@ -8,7 +8,6 @@ import {
     Collection,
 } from 'discord.js';
 import Table from 'cli-table3';
-import Command from '@struct/Command';
 interface Config {
     clientId: string | undefined;
     token: string | undefined;
@@ -17,11 +16,13 @@ interface Config {
     production: boolean | undefined;
     guildId: string | undefined;
 }
-import { join, resolve } from 'path';
+import { join } from 'path';
 import logger from '../transports/winston';
 import { Logger } from 'winston';
 import { readdirSync } from 'fs';
 import Module from './Module';
+import CommandLoader from 'collections/CommandLoader';
+import EventLoader from 'collections/EventLoader';
 //import Event from 'struct/Event';
 
 const styling: Table.TableConstructorOptions = {
@@ -45,8 +46,9 @@ export default class Kottu {
     public readonly bugReportId: string | undefined;
     public readonly production: boolean | undefined;
     public readonly clientOptions: ClientOptions;
-    private body: RESTPostAPIChatInputApplicationCommandsJSONBody[];
-    public commands: Collection<string, Command>;
+    public body: RESTPostAPIChatInputApplicationCommandsJSONBody[];
+    public commands: CommandLoader;
+    public events: EventLoader;
     public modules: Collection<string, Module>;
 
     constructor({
@@ -64,13 +66,14 @@ export default class Kottu {
         this.production = production;
         this.guildId = guildId;
         this.logger = logger;
-        this.commands = new Collection();
+
+        this.body = [];
     }
     /**
      * initiate client
      * @returns {ThisType}
      */
-    initiate() {
+    async initiate() {
         this.client = new Client({
             intents: [
                 GatewayIntentBits.Guilds,
@@ -80,8 +83,11 @@ export default class Kottu {
                 GatewayIntentBits.GuildPresences,
             ],
         });
-        this.loadApplicationCommands().loadCommands().loadEvents();
-        //.loadModules()
+        this.commands = new CommandLoader(this);
+        this.events = new EventLoader(this);
+        await this.loadApplicationCommands();
+        //.loadModules();
+
         this.client.login(this.token);
         return this;
     }
@@ -89,84 +95,23 @@ export default class Kottu {
      * Loads all slash commands using REST API
      * @returns {ThisType} `this`
      */
-    public loadApplicationCommands() {
-        async () => {
-            const applicationCommands =
-                this.production === true
-                    ? Routes.applicationCommands(this.clientId ?? '')
-                    : Routes.applicationGuildCommands(
-                          this.clientId ?? '',
-                          this.guildId ?? '',
-                      );
-            try {
-                this.logger.info('Loading application commands!');
-                const rest = new REST({
-                    version: '10',
-                }).setToken(this.token ?? '');
-                await rest.put(applicationCommands, {
-                    body: this.body,
-                });
-                this.logger.info('Loaded application commands!');
-            } catch (err) {
-                if (err instanceof Error) this.logger.error(err.stack);
-                else this.logger.error(err);
-            }
-        };
-        return this;
-    }
-    /**
-     * loads commands to collection
-     * @returns {ThisType} this
-     */
-    public loadCommands() {
-        this.logger.info('Loading commands...');
-        const table = new Table({
-            head: ['File', 'Name', 'Type', 'Status'],
-            ...styling,
-        });
-        const commandFolders = readdirSync(join('./src/commands/')).filter(
-            (f) => !f.endsWith('.ts'),
-        );
-        if (commandFolders.length === 0) this.logger.warn('No commands found!');
-        commandFolders.forEach((dir) => {
-            const commands = readdirSync(resolve(join('./src/commands/', dir)));
-            console.log(commands);
-            commands.forEach(async (cmd) => {
-                const CommandClass = (
-                    await import(join('../commands', dir, cmd))
-                ).default;
-                const command = new CommandClass(this);
-                if (command.name) {
-                    console.log(command.name);
-                    table.push([cmd, command.name, command.type, 'pass']);
-                    this.commands.set(command.name, command);
-                }
-            });
-        });
-        this.logger.info(`\n${table.toString()}`);
-        this.logger.info('loaded commands...');
-        return this;
-    }
-    /**
-     * loads client events
-     * @returns {ThisType}
-     */
-    public loadEvents() {
-        this.logger.info('Loading events...');
-        const table = new Table({
-            head: ['File', 'Name', 'Status'],
-            ...styling,
-        });
-        const events = readdirSync('./src/events').filter((f) =>
-            f.endsWith('.ts'),
-        );
-        if (events.length === 0) this.logger.warn('No modules found!');
-        events.forEach(async (f) => {
-            const event = (await import(`../events/${f}`)).default;
-            this.client.on(event.event, event.run.bind(null, this));
-            table.push([f, f.substring(0, f.lastIndexOf('.')), '✅']);
-        });
-        this.logger.info(`\n${table.toString()}`);
+    public async loadApplicationCommands() {
+        const applicationCommands =
+            this.production === true
+                ? Routes.applicationCommands(this.clientId ?? '')
+                : Routes.applicationGuildCommands(
+                      this.clientId ?? '',
+                      this.guildId ?? '',
+                  );
+        try {
+            this.logger.info('Loading application commands!');
+            const rest = new REST({ version: '10' }).setToken(this.token ?? '');
+            await rest.put(applicationCommands, { body: this.body });
+            this.logger.info('Loaded application commands!');
+        } catch (err) {
+            if (err instanceof Error) this.logger.error(err.stack);
+            else this.logger.error(err);
+        }
         return this;
     }
     /**
@@ -189,6 +134,7 @@ export default class Kottu {
             this.commands.set(module.name, module);
         });
         this.logger.info(`\n${table.toString()}`);
+
         return this;
     }
 }

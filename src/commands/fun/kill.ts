@@ -9,7 +9,7 @@ export default class Kill extends Command {
             options: [
                 {
                     type: 6,
-                    name: 'User',
+                    name: 'user',
                     description: 'The target',
                     required: true,
                 },
@@ -17,11 +17,11 @@ export default class Kill extends Command {
         });
     }
     public execute(interaction: ChatInputCommandInteraction<CacheType>) {
-        const { target, member } = this.getMember(interaction);
-        if (!target || !member) {
+        const { target, user } = this.getUser(interaction);
+        if (!target || !user) {
             return interaction.reply('An unexpected error occurred!');
         }
-        if (member?.id === target?.id) {
+        if (user?.id === target?.id) {
             this.reply(interaction, {
                 content: 'Suicide is not an option!',
                 ephemeral: true,
@@ -31,8 +31,8 @@ export default class Kill extends Command {
         const phrase = this.randomElement(kills);
         let str = phrase as string;
         str = str
-            .replace(/\$author/g, interaction.member?.toString() ?? '')
-            .replace(/\$mention/g, member?.toString() ?? '');
+            .replace(/\$author/g, user.username)
+            .replace(/\$mention/g, target.username);
         this.reply(interaction, { content: str });
         return Promise.resolve();
     }

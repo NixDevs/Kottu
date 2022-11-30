@@ -32,6 +32,7 @@ export default class Command extends Base {
      * the command type
      */
     public type: CommandType;
+    public options: ApplicationCommandOption[];
     constructor(
         kottu: Kottu,
         {
@@ -39,6 +40,7 @@ export default class Command extends Base {
             description,
             permissions = PermissionLevel.Public,
             type = CommandType.Misc,
+            options = [],
         }: CommandOptions,
     ) {
         super(kottu);
@@ -46,6 +48,7 @@ export default class Command extends Base {
         this.description = description;
         this.permissions = permissions;
         this.type = type;
+        this.options = options;
     }
     /**
      * Fall back execute command
@@ -58,18 +61,13 @@ export default class Command extends Base {
         return Promise.resolve();
     }
     /**
-     * Returns member and user from interaction member option
+     * Returns user and user from interaction member option
      * @param interaction the slash command interaction
-     * @param option the name for the member option
+     * @param option the name for the user option
      */
-    public getMember(
-        interaction: ChatInputCommandInteraction,
-        option = 'member',
-    ) {
-        if (!interaction.inCachedGuild()) return { target: null, member: null };
-        const member = interaction.options.getMember(option);
-        if (!member)
-            return { target: interaction.member, member: interaction.member };
-        else return { target: member, member: interaction.member };
+    public getUser(interaction: ChatInputCommandInteraction, option = 'user') {
+        if (!interaction.inCachedGuild()) return { target: null, user: null };
+        const user = interaction.options.getUser(option) ?? interaction.user;
+        return { target: user, user: interaction.user };
     }
 }

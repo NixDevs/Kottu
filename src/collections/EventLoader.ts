@@ -6,6 +6,7 @@ export default class EventCollection extends Collection<string, Command> {
     constructor(kottu: Kottu) {
         super();
         this.kottu = kottu;
+        this.loadCommands();
     }
     loadCommands() {
         const values = Object.values(events);
@@ -17,5 +18,6 @@ export default class EventCollection extends Collection<string, Command> {
                 `[Event] loaded ${event.event.toString()} event`,
             );
         });
+        return this;
     }
 }
