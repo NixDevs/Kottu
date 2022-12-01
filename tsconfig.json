@@ -27,6 +27,6 @@
         },
         "typeRoots": ["./global.d.ts", "./node_modules/@types"]
     },
-    "include": ["src"],
-    "exclude": ["dist", "node_modules"]
+    "include": ["src", "src/**/*.ts"],
+    "exclude": ["dist", "node_modules", "dist/**/*.ts", "dist/**/*.js"]
 }
