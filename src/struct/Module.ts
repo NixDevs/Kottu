@@ -3,15 +3,12 @@ import Kottu from '@struct/Kottu';
 export default class Module extends Base {
     public name: string;
     public events: string[];
-    public games: Record<string, unknown>;
     constructor(kottu: Kottu) {
         super(kottu);
 
         this.name = this.constructor.name;
 
         this.events = ['messageCreate', 'interactionCreate'];
-
-        this.games = {};
     }
     /**
      * Register events in module
