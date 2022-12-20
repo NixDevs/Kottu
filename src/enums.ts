@@ -30,3 +30,8 @@ export enum PermissionLevel {
     Admin = 'admin',
     Public = 'public',
 }
+
+export enum ButtonCustomIds {
+    TABOO_ENTRY = 'Taboo Button',
+    CAH_ENTRY = 'CAH Button',
+}
