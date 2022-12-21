@@ -1,2 +1,2 @@
 export * from '@commands/fun';
-export * from '@commands/utils';
+export * from '@commands/info';
