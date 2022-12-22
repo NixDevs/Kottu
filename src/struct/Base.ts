@@ -110,4 +110,10 @@ export default class Base {
             },
         });
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public logError(error: Error | any) {
+        if (error instanceof Error) {
+            return this.logger.error(error.stack);
+        } else return this.logger.error(error);
+    }
 }

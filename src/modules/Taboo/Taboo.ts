@@ -10,7 +10,7 @@ import {
 } from 'discord.js';
 import { ITabooPlayerData, ITabooCard } from 'types';
 import { stripIndents } from 'common-tags';
-import { ButtonCustomIds } from 'enums';
+import { ButtonCustomIds, Color } from 'enums';
 import TabooModule from '.';
 export default class Taboo extends Base {
     public channel: TextChannel;
@@ -32,7 +32,7 @@ export default class Taboo extends Base {
     async entryForm() {
         /* ------------------------------------------------------------------------------- */
         const embed = new EmbedBuilder()
-            .setColor('Purple')
+            .setColor(Color.Purple)
             .setTitle('A game of taboo has started!')
             .setDescription(stripIndents`
         **Welcome to Taboo!**
@@ -88,6 +88,12 @@ export default class Taboo extends Base {
     getPlayer(id: string) {
         return this.players.find((player) => player.id === id) ?? null;
     }
+    addPoints(id: string, points: number) {
+        const index = this.getPlayerIndex(id);
+        const playerData = this.getPlayer(id) as ITabooPlayerData;
+        playerData.points += points;
+        this.players[index] = playerData;
+    }
     interactionHandler(user: User) {
         const data = this.players.find((p) => p.id === user.id);
         if (!data) {
@@ -104,7 +110,67 @@ export default class Taboo extends Base {
     }
     processRound() {
         const currentPlayer = this.players[this.index];
-        if (!currentPlayer) return;
+        if (!currentPlayer) return this.endGame();
+        const player = this.channel.guild.members.cache.get(currentPlayer.id);
+        if (!player) {
+            this.channel.send({
+                content: "This player doesn't seem to exist... NEXT PLEASE!",
+            });
+            return this.endRound();
+        }
+        const embed = new EmbedBuilder().setColor(Color.White)
+            .setDescription(stripIndents`
+            **Word**: \`${this.card.word}\`
+            **Description**: \`${this.card.banned.join('`, `')}\` 
+            `);
+        const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new ButtonBuilder()
+                .setStyle(ButtonStyle.Link)
+                .setLabel('Back to channel')
+                .setURL(this.channel.url),
+        );
+        player.send({ embeds: [embed], components: [row] }).catch(() => {
+            this.channel.send(
+                `${player.toString()} : Cannot send DMS to this user. Skipping user.`,
+            );
+            return this.endRound();
+        });
+        this.channel.send({
+            content: `${player.toString()}, word has been sent in DMs. You have a minute to describe your word!`,
+        });
+        const collector = this.channel.createMessageCollector({ time: 6e4 });
+        collector.on('collect', (message) => {
+            if (!this.players.find((p) => p.id === message.author.id)) return;
+            if (message.author.id === player.id) {
+                if (this.ifCardMatches(message.content)) {
+                    this.addPoints(player.id, -3);
+                    const embed = new EmbedBuilder()
+                        .setTitle('You broke the taboo!')
+                        .setColor(Color.Red)
+                        .setDescription(
+                            'For being trash at the game, you receive 💫`-3 points`💫',
+                        );
+                    this.channel.send({ embeds: [embed] });
+                    collector.stop();
+                }
+            } else {
+                if (this.ifCardMatches(message.content)) {
+                    this.addPoints(message.author.id, 1);
+                    this.addPoints(player.id, 2);
+                    this.channel.send({
+                        content: stripIndents`
+                        Well done! You found out the answer!
+                        ${player} receives \`2 points\`.
+                        ${message.author.toString()} receives \`1 point\`.
+                        `,
+                    });
+                    collector.stop();
+                }
+            }
+        });
+        collector.on('end', () => {
+            this.endRound();
+        });
     }
     endRound() {
         const embed = new EmbedBuilder()
@@ -118,7 +184,7 @@ export default class Taboo extends Base {
             )
             .setFooter({ text: 'Next round in 10 seconds!' });
         this.channel.send({ embeds: [embed] });
-        if (!this.players[this.index + 1]) return this;
+        if (!this.players[this.index + 1]) return this.endGame();
         this.sleep(10e3);
         this.index += 1;
     }
@@ -147,12 +213,12 @@ export default class Taboo extends Base {
             ],
         });
     }
-    isValidInput(string: string) {
+    ifCardMatches(string: string) {
         string = string.toLowerCase();
-        let validation = true;
+        let validation = false;
         this.card.banned.forEach((word) => {
-            if (string.includes(word.toLowerCase())) validation = false;
+            if (string.includes(word.toLowerCase())) validation = true;
         });
-        return string.includes(this.card.word.toLowerCase()) ?? validation;
+        return string.includes(this.card.word.toLowerCase()) || validation;
     }
 }
