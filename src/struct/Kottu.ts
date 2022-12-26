@@ -7,7 +7,6 @@ import {
     REST,
     Collection,
 } from 'discord.js';
-import Table from 'cli-table3';
 interface Config {
     clientId: string | undefined;
     token: string | undefined;
@@ -16,26 +15,14 @@ interface Config {
     production: boolean | undefined;
     guildId: string | undefined;
 }
-import { join } from 'path';
 import logger from '../transports/winston';
 import { Logger } from 'winston';
-import { readdirSync } from 'fs';
 import Module from './Module';
 import CommandLoader from 'collections/CommandLoader';
 import EventLoader from 'collections/EventLoader';
+import ModuleLoader from 'collections/ModuleLoader';
 //import Event from 'struct/Event';
 
-const styling: Table.TableConstructorOptions = {
-    chars: {
-        mid: '',
-        'left-mid': '',
-        'mid-mid': '',
-        'right-mid': '',
-    },
-    style: {
-        head: ['yellow'],
-    },
-};
 export default class Kottu {
     public client: Client;
     public clientId: string | undefined;
@@ -85,6 +72,7 @@ export default class Kottu {
         });
         this.commands = new CommandLoader(this);
         this.events = new EventLoader(this);
+        this.modules = new ModuleLoader(this);
         await this.loadApplicationCommands();
         //.loadModules();
 
@@ -112,29 +100,6 @@ export default class Kottu {
             if (err instanceof Error) this.logger.error(err.stack);
             else this.logger.error(err);
         }
-        return this;
-    }
-    /**
-     * loads modules
-     * @returns {ThisType}
-     */
-    public loadModules() {
-        this.logger.info('Loading events...');
-        const table = new Table({
-            head: ['File', 'Name', 'Status'],
-            ...styling,
-        });
-        const modules = readdirSync('./src/modules');
-        if (modules.length === 0) return this.logger.warn('No modules found!');
-        modules.forEach(async (dir) => {
-            const file = (await import(join('./src/modules', dir, 'index.ts')))
-                .default;
-            const module = new file(this);
-            file.registerEvents();
-            this.commands.set(module.name, module);
-        });
-        this.logger.info(`\n${table.toString()}`);
-
         return this;
     }
 }

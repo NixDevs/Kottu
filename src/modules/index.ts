@@ -1,1 +1,1 @@
-export default {};
+export { default as Taboo } from './Taboo';

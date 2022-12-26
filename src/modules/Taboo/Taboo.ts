@@ -2,6 +2,7 @@ import { Base, Kottu } from '@struct';
 import {
     ActionRowBuilder,
     ButtonBuilder,
+    ButtonInteraction,
     ButtonStyle,
     EmbedBuilder,
     Guild,
@@ -28,6 +29,8 @@ export default class Taboo extends Base {
         this.players = [];
         this.index = 0;
         this.card = module.getCard();
+
+        this.entryForm();
     }
     async entryForm() {
         /* ------------------------------------------------------------------------------- */
@@ -38,9 +41,9 @@ export default class Taboo extends Base {
         **Welcome to Taboo!**
 
         Taboo is all about describing words, with a certain twist. To begin, lets click on the button below! You can always 
-        leave by clicking again! The game will start in ${Math.round(
+        leave by clicking again! The game will start in <t:${Math.round(
             Date.now() / 1000 + 60,
-        )}!
+        )}:R>!
 
         Make sure you
         •   Read the rules by running \`/taboo info\`
@@ -68,7 +71,14 @@ export default class Taboo extends Base {
         });
         setTimeout(() => {
             msg.edit({ components: [componentDisabled] });
-        });
+            if (this.players.length < 2) {
+                this.channel.send({
+                    content: 'Less than 2 players. Ending game!',
+                });
+                return this.endGame();
+            }
+            this.processRound();
+        }, 60e3);
     }
     /**
      *
@@ -94,16 +104,16 @@ export default class Taboo extends Base {
         playerData.points += points;
         this.players[index] = playerData;
     }
-    interactionHandler(user: User) {
+    interactionHandler(user: User, interaction: ButtonInteraction<'cached'>) {
         const data = this.players.find((p) => p.id === user.id);
         if (!data) {
             this.players.push({ id: user.id, points: 0 });
-            return this.channel.send({
+            return interaction.reply({
                 content: `${user.username} has joined the game!`,
             });
         } else {
             this.players.splice(this.players.indexOf(data), 1);
-            return this.channel.send({
+            return interaction.reply({
                 content: `${user.username} has left the game!`,
             });
         }
@@ -187,6 +197,7 @@ export default class Taboo extends Base {
         if (!this.players[this.index + 1]) return this.endGame();
         this.sleep(10e3);
         this.index += 1;
+        this.processRound();
     }
     sleep(ms: number): Promise<void> {
         return new Promise((resolve) => {
@@ -198,9 +209,11 @@ export default class Taboo extends Base {
     endGame() {
         delete this.module.games[this.channel.guild.id];
         clearTimeout(this.time);
-        const sorted = this.players.sort((a, b) => {
-            return a.points - b.points;
-        });
+        const sorted = this.players
+            .sort((a, b) => {
+                return a.points - b.points;
+            })
+            .reverse();
         return this.channel.send({
             embeds: [
                 new EmbedBuilder().setTitle('Game Ended!')

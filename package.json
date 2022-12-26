@@ -27,7 +27,7 @@
         "husky": "^8.0.2",
         "lint-staged": "^13.1.0",
         "prettier": "^2.8.1",
-        "prisma": "^4.6.1",
+        "prisma": "^4.8.0",
         "ts-node-dev": "^2.0.0",
         "tsconfig-paths": "^4.1.1",
         "typescript": "^4.9.3"
@@ -37,6 +37,7 @@
         "async-each": "^1.0.3",
         "cli-table3": "^0.6.3",
         "commitlint": "^17.3.0",
+        "common-tags": "^1.8.2",
         "discord.js": "^14.7.1",
         "dotenv": "^16.0.3",
         "path": "^0.12.7",

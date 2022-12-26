@@ -32,8 +32,14 @@ export default class TabooModule extends Module {
         if (!interaction.inCachedGuild()) return;
         if (!interaction.isButton()) return;
         if (interaction.customId !== ButtonCustomIds.TABOO_ENTRY) return;
-        return this.games[interaction.guild.id].interactionHandler(
+        if (!this.games[interaction.guild.id])
+            return interaction.reply({
+                content: 'An unexpected error occurred',
+                ephemeral: true,
+            });
+        this.games[interaction.guild.id].interactionHandler(
             interaction.user,
+            interaction,
         );
     }
     getCard(): ITabooCard {
