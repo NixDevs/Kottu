@@ -1,5 +1,5 @@
 import { Command, Kottu } from '@struct';
-import { ChatInputCommandInteraction, CacheType } from 'discord.js';
+import { ChatInputCommandInteraction } from 'discord.js';
 import kills from 'assets/kill.json';
 export default class Kill extends Command {
     constructor(kottu: Kottu) {
@@ -16,7 +16,7 @@ export default class Kill extends Command {
             ],
         });
     }
-    public execute(interaction: ChatInputCommandInteraction<CacheType>) {
+    public execute(interaction: ChatInputCommandInteraction<'cached'>) {
         const { target, user } = this.getUser(interaction);
         if (!target || !user) {
             return interaction.reply('An unexpected error occurred!');
