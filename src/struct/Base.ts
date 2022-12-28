@@ -110,6 +110,16 @@ export default class Base {
             },
         });
     }
+    /**
+     * Shuffles the array using the [Durstenfeld Method](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm)
+     * @param array The array is changed permanently.
+     */
+    public shuffleArray(array: unknown[]): void {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public logError(error: Error | any) {
         if (error instanceof Error) {
