@@ -33,7 +33,20 @@ export default new Event(
                 return Promise.resolve();
             }
             try {
-                command?.execute(interaction);
+                command?.execute(interaction).then(() => {
+                    const subCommand = command.options.find(
+                        (f) =>
+                            f.type === 1 &&
+                            f.name === interaction.options.getSubcommand(),
+                    );
+                    if (subCommand)
+                        return (
+                            command[
+                                subCommand.name as keyof typeof command
+                                // eslint-disable-next-line @typescript-eslint/ban-types
+                            ] as Function
+                        )(interaction);
+                });
             } catch (err) {
                 if (err instanceof Error) {
                     kottu.logger.error(err.stack);
