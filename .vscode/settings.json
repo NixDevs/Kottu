@@ -21,6 +21,7 @@
         ".git/objects",
         ".vscode",
         ".vscode-insiders",
-        "kill.json"
+        "kill.json",
+        "src/assets/*"
     ]
 }
