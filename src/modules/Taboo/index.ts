@@ -8,7 +8,7 @@ import { ButtonCustomIds } from 'enums';
 import { ITabooCard } from 'types';
 //import { ITabooGame } from 'types';
 import Taboo from './Taboo';
-
+import cards from 'assets/tabooCards.json';
 export default class TabooModule extends Module {
     public module: string;
     public friendlyName: string;
@@ -43,6 +43,7 @@ export default class TabooModule extends Module {
         );
     }
     getCard(): ITabooCard {
-        return { word: '', banned: [''] };
+        const card = this.randomElement(cards);
+        return { word: card.word, banned: card.taboo };
     }
 }

@@ -60,7 +60,7 @@ export default class Base {
     /**
      * Returns a random element from array
      */
-    public randomElement<T>(arr: T[]): unknown {
+    public randomElement<T>(arr: T[]): T {
         return arr[Math.round(Math.random() * arr.length)];
     }
     /**
