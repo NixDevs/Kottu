@@ -77,6 +77,7 @@ export default class Taboo extends Base {
                 });
                 return this.endGame();
             }
+            this.shuffleArray(this.players);
             this.processRound();
         }, 60e3);
     }
