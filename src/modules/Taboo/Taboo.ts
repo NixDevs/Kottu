@@ -120,6 +120,7 @@ export default class Taboo extends Base {
         }
     }
     processRound() {
+        this.card = this.module.getCard();
         const currentPlayer = this.players[this.index];
         if (!currentPlayer) return this.endGame();
         const player = this.channel.guild.members.cache.get(currentPlayer.id);
