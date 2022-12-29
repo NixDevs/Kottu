@@ -124,10 +124,9 @@ export default class Taboo extends Base {
             });
         }
     }
-    processRound() {
+    async processRound() {
         this.card = this.module.getCard();
         const currentPlayer = this.players[this.index];
-        if (!currentPlayer) return this.endGame();
         const player = this.channel.guild.members.cache.get(currentPlayer.id);
         if (!player) {
             this.channel.send({
@@ -138,7 +137,7 @@ export default class Taboo extends Base {
         const embed = new EmbedBuilder().setColor(Color.White)
             .setDescription(stripIndents`
             **Word**: \`${this.card.word}\`
-            **Description**: \`${this.card.banned.join('`, `')}\` 
+            **Disallowed**: \`${this.card.banned.join('`, `')}\` 
             `);
         const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
@@ -146,12 +145,15 @@ export default class Taboo extends Base {
                 .setLabel('Back to channel')
                 .setURL(this.channel.url),
         );
-        player.send({ embeds: [embed], components: [row] }).catch(() => {
+        try {
+            await player.send({ embeds: [embed], components: [row] });
+        } catch (err) {
             this.channel.send(
                 `${player.toString()} : Cannot send DMS to this user. Skipping user.`,
             );
             return this.endRound();
-        });
+        }
+
         this.channel.send({
             content: `${player.toString()}, word has been sent in DMs. You have a minute to describe your word!`,
         });
@@ -171,7 +173,10 @@ export default class Taboo extends Base {
                     collector.stop();
                 }
             } else {
-                if (this.ifCardMatches(message.content)) {
+                if (
+                    this.card.word.toLowerCase() ===
+                    message.content.toLowerCase()
+                ) {
                     this.addPoints(message.author.id, 1);
                     this.addPoints(player.id, 2);
                     this.channel.send({
@@ -214,7 +219,7 @@ export default class Taboo extends Base {
         });
     }
     endGame() {
-        delete this.module.games[this.channel.guild.id];
+        delete this.module.games[this.channel.id];
         clearTimeout(this.time);
         const sorted = this.players
             .sort((a, b) => {

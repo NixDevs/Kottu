@@ -19,25 +19,37 @@ export default class TabooModule extends Module {
         this.games = {};
     }
     start(interaction: ChatInputCommandInteraction<'cached'>) {
-        if (this.games[interaction.guild.id])
+        if (this.games[interaction.channelId])
             return Promise.resolve('A game already exists on this channel!');
-        this.games[interaction.guild.id] = new Taboo(
+        this.games[interaction.channelId] = new Taboo(
             this,
             this.kottu,
             interaction.channel as TextChannel,
         );
         return Promise.resolve('Starting game...');
     }
+    stop(interaction: ChatInputCommandInteraction<'cached'>) {
+        if (!this.games[interaction.channelId])
+            return Promise.reject('A game does not exist in this channel!');
+        const game = this.games[interaction.channelId];
+        try {
+            game.endGame();
+            clearTimeout(game.time);
+            Promise.resolve('Successfully stopped the running game!');
+        } catch (err) {
+            this.logError(err);
+        }
+    }
     interactionCreate(interaction: Interaction) {
         if (!interaction.inCachedGuild()) return;
         if (!interaction.isButton()) return;
         if (interaction.customId !== ButtonCustomIds.TABOO_ENTRY) return;
-        if (!this.games[interaction.guild.id])
+        if (!this.games[interaction.channelId])
             return interaction.reply({
                 content: 'An unexpected error occurred',
                 ephemeral: true,
             });
-        this.games[interaction.guild.id].interactionHandler(
+        this.games[interaction.channelId].interactionHandler(
             interaction.user,
             interaction,
         );
