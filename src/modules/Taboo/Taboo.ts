@@ -220,9 +220,9 @@ export default class Taboo extends Base {
                 new EmbedBuilder().setTitle('Game Ended!')
                     .setDescription(stripIndents`
                     **Points Table**
-                    ${sorted.map(
-                        (p) => `<@${p.id}> : \`${p.points}\``,
-                    )}                    
+                    ${sorted
+                        .map((p) => `<@${p.id}> : \`${p.points}\``)
+                        .join('\n')}                    
                     `),
             ],
         });

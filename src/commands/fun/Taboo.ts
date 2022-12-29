@@ -6,8 +6,10 @@ import {
     EmbedBuilder,
 } from 'discord.js';
 import { Color, CommandType } from 'enums';
+import TabooModule from 'modules/Taboo';
 
 export default class Taboo extends Command {
+    public taboo: TabooModule;
     constructor(kottu: Kottu) {
         super(kottu, {
             name: 'taboo',
@@ -20,10 +22,17 @@ export default class Taboo extends Command {
                     description: 'Get information about how to play',
                     options: [],
                 },
+                {
+                    type: 1,
+                    name: 'start',
+                    description: 'Start a game of taboo!',
+                    options: [],
+                },
             ],
         });
     }
     public execute(): Promise<void | InteractionResponse<boolean>> {
+        this.taboo = this.kottu.modules.get('TabooModule') as TabooModule;
         return Promise.resolve();
     }
     public info(
@@ -57,5 +66,11 @@ export default class Taboo extends Command {
             .setColor(Color.Purple);
         interaction.reply({ embeds: [embed] });
         return Promise.resolve();
+    }
+    public start(interaction: ChatInputCommandInteraction<'cached'>) {
+        this.taboo
+            .start(interaction)
+            .then((res) => this.reply(interaction, { content: res }))
+            .catch(this.logError);
     }
 }
