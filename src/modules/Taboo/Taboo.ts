@@ -4,6 +4,7 @@ import {
     ButtonBuilder,
     ButtonInteraction,
     ButtonStyle,
+    chatInputApplicationCommandMention,
     EmbedBuilder,
     Guild,
     TextChannel,
@@ -41,12 +42,16 @@ export default class Taboo extends Base {
         **Welcome to Taboo!**
 
         Taboo is all about describing words, with a certain twist. To begin, lets click on the button below! You can always 
-        leave by clicking again! The game will start in <t:${Math.round(
+        leave by clicking again! The game will start <t:${Math.round(
             Date.now() / 1000 + 60,
         )}:R>!
 
         Make sure you
-        •   Read the rules by running \`/taboo info\`
+        •   Read the rules by running ${chatInputApplicationCommandMention(
+            'taboo',
+            'info',
+            '1057898564568760331',
+        )}
         •   Do not try to find exploits
         •   Have fun!
 `);
