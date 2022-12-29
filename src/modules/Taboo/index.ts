@@ -35,9 +35,9 @@ export default class TabooModule extends Module {
         try {
             game.endGame();
             clearTimeout(game.time);
-            Promise.resolve('Successfully stopped the running game!');
+            return Promise.resolve('Successfully stopped the running game!');
         } catch (err) {
-            this.logError(err);
+            return Promise.reject(err);
         }
     }
     interactionCreate(interaction: Interaction) {
