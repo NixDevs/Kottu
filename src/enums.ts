@@ -34,4 +34,5 @@ export enum PermissionLevel {
 export enum ButtonCustomIds {
     TABOO_ENTRY = 'Taboo Button',
     CAH_ENTRY = 'CAH Button',
+    CAH_SUBMIT = 'CAH Submission',
 }
