@@ -132,9 +132,9 @@ export default class CAH extends Base {
                     ephemeral: true,
                 });
             }
-            if (interaction.customId === ButtonCustomIds.CA_VOTE_BUTTON) {
+            if (interaction.customId === ButtonCustomIds.CAH_VOTE_BUTTON) {
                 interaction.customId.slice(
-                    ButtonCustomIds.CA_VOTE_BUTTON.length,
+                    ButtonCustomIds.CAH_VOTE_BUTTON.length,
                 );
                 const num = parseInt(interaction.customId);
                 const players = this.players.filter((p) => p.submission);
@@ -175,7 +175,7 @@ export default class CAH extends Base {
             c.forEach(() => {
                 const button = new ButtonBuilder()
                     .setCustomId(
-                        `${ButtonCustomIds.CA_VOTE_BUTTON} ${i.toString()}`,
+                        `${ButtonCustomIds.CAH_VOTE_BUTTON} ${i.toString()}`,
                     )
                     .setLabel(i.toString())
                     .setStyle(ButtonStyle.Primary);
