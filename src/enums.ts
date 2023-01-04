@@ -36,5 +36,5 @@ export enum ButtonCustomIds {
     CAH_ENTRY = 'CAH Button',
     CAH_SUBMIT_MENU = 'CAH Submit Menu',
     CAH_SUBMIT_BUTTON = 'CAH submit Button',
-    CA_VOTE_BUTTON = 'CAH vote button',
+    CAH_VOTE_BUTTON = 'CAH vote button',
 }
