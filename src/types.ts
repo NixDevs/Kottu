@@ -11,8 +11,9 @@ export interface ITabooCard {
 export interface ICardsAgainstHumanityPlayerData {
     id: string;
     submission: string;
-    points: boolean;
+    points: number;
     choices: string[];
+    voted: boolean;
 }
 /**
  * Data for a game of CAH

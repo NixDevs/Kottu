@@ -28,6 +28,12 @@ export default class Taboo extends Command {
                     description: 'Start a game of taboo!',
                     options: [],
                 },
+                {
+                    type: 1,
+                    name: 'stop',
+                    description: 'Stop a game of taboo!',
+                    options: [],
+                },
             ],
         });
     }
@@ -70,6 +76,12 @@ export default class Taboo extends Command {
     public start(interaction: ChatInputCommandInteraction<'cached'>) {
         this.taboo
             .start(interaction)
+            .then((res) => this.reply(interaction, { content: res }))
+            .catch(this.logError);
+    }
+    public stop(interaction: ChatInputCommandInteraction<'cached'>) {
+        this.taboo
+            .stop(interaction)
             .then((res) => this.reply(interaction, { content: res }))
             .catch(this.logError);
     }
