@@ -33,7 +33,7 @@
         "typescript": "^4.9.4"
     },
     "dependencies": {
-        "@prisma/client": "^4.8.0",
+        "@prisma/client": "^4.8.1",
         "async-each": "^1.0.3",
         "cli-table3": "^0.6.3",
         "commitlint": "^17.3.0",
